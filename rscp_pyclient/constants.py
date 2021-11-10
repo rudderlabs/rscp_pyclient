@@ -10,7 +10,7 @@ segWorkspacesDir = segConfigDir + "workspaces/"
 rsConfigDir = savedir + "RudderStackConfig/"
 
 
-def getServerSlug(serverDesc):
+def getServerSlug(serverDesc=True):
     if isinstance(serverDesc, str):
         return ".custom"
     elif serverDesc == True:
@@ -19,21 +19,21 @@ def getServerSlug(serverDesc):
         return ".dev"
 
 # Use this for retrieval of source and destination definitions.
-def getRudderSchemaRetrievalUrl(serverDesc):
+def getRudderSchemaRetrievalUrl(serverDesc=True):
     if isinstance(serverDesc, str):
         return serverDesc
     else:
         return 'https://api{0}.rudderlabs.com'.format(getServerSlug(serverDesc))
 
 # Use this for creation and deletion of sources, destinations and connections.
-def getRudderWorkspaceUrl(serverDesc):
+def getRudderWorkspaceUrl(serverDesc=True):
     if isinstance(serverDesc, str):
         return serverDesc + "/v2"
     else:
         return 'https://api{0}.rudderlabs.com/v2'.format(getServerSlug(serverDesc))
 
 # Folder where Rudder schema information should be saved.
-def getRudderFilepath(serverDesc):
+def getRudderFilepath(serverDesc=True):
     return savedir + "RudderStackConfig{0}/".format(getServerSlug(serverDesc))
 
 # URL for downloading Segment config.
