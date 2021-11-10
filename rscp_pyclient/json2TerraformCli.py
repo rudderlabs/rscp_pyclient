@@ -27,10 +27,10 @@ def jsonToTerraformTreeWithIndents(json):
     elementryType = None
     if isinstance(json, str):
         elementryType = "str"
-    elif isinstance(json, int) or isinstance(json, float):
-        elementryType = "num"
     elif isinstance(json, bool):
         elementryType = "bool"
+    elif isinstance(json, int) or isinstance(json, float):
+        elementryType = "num"
 
     if elementryType != None:
         valueStr = "\'{0}\'".format(json) if isinstance(json, str) else str(json)
