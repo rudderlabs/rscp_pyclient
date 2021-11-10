@@ -4,24 +4,19 @@
 <br/>
 
 
-# \*\* Repo Name \*\*
+# RudderStack Control Plain Client 
+Use this python package to interact with RudderStack Control Plain REST API.
 
-\*\* Repo description \*\*
-|:------|
+## Pre Requisites 
+Python 3.8
+Bash
+Python Modules: Flask, Requests, Flask_Cors
 
 > Questions? Start a conversation on our [**Slack channel**][slack].
 
-# Why Use \*\* Software Name \*\*
-
-\*\* Describe what the software does. \*\*
-
-# Key Features
-
-\*\* Describe the key features, if necessary. \*\*
-
 # Get Started
 
-\*\* Describe how to use the software. \*\*
+pip install git+https://github.com/rudderlabs/rscp_pyclient/
 
 # License
 
