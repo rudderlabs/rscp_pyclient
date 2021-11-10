@@ -14,7 +14,7 @@ pip install https://github.com/rudderlabs/rscp_pyclient/
 """
 
 setuptools.setup(
-    name='rscp_client',
+    name='rscp_pyclient',
     version='0.0.1',
     author='Nishant Sharma',
     author_email='nishant@goalsmacker.in',
@@ -26,6 +26,6 @@ setuptools.setup(
         "Bug Tracker": "https://github.com/rudderlabs/segment-migrator/issues"
     },
     license='MIT',
-    packages=['rscp_client'],
+    packages=['rscp_pyclient'],
     install_requires=['flask', 'flask_cors', 'requests'],
 )
