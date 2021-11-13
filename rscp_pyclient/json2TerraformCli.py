@@ -33,7 +33,7 @@ def jsonToTerraformTreeWithIndents(json):
         elementryType = "num"
 
     if elementryType != None:
-        valueStr = "\'{0}\'".format(json) if isinstance(json, str) else str(json)
+        valueStr = "\"{0}\"".format(json) if isinstance(json, str) else str(json)
         return [(0, "{"), (2, elementryType + " ="), (4, valueStr), (0, "}")]
 
     if isinstance(json, list):
@@ -53,11 +53,18 @@ def jsonToTerraformTreeWithIndents(json):
         else:
             retlist = []
             for index, (jsonKey, jsonValue) in enumerate(json.items()):
-                jsonKeyStr = "\'{0}\'".format(jsonKey) if isinstance(jsonKey, str) else str(jsonKey)
+                jsonKeyStr = "\"{0}\":".format(jsonKey) if isinstance(jsonKey, str) else str(jsonKey)
                 jsonValueTerraformTree = jsonToTerraformTreeWithIndents(jsonValue)
                 if index != len(json) - 1:
                     jsonValueTerraformTree = _appendComma(jsonValueTerraformTree)
-                retlist.append([(0, jsonKeyStr +  ":"), jsonValueTerraformTree])
+                if isinstance(jsonValueTerraformTree, list) \
+                        and len(jsonValueTerraformTree) >= 1 \
+                        and isinstance(jsonValueTerraformTree[0], tuple) \
+                        and jsonValueTerraformTree[0][1] == "{" :
+                    jsonKeyStr += " {"
+                    del jsonValueTerraformTree[0]
+
+                retlist.append([(0, jsonKeyStr), jsonValueTerraformTree])
             
             return [(0, "{"), (2, "object = {"), (4, retlist), (2, "}"), (0, "}")]
     else:
