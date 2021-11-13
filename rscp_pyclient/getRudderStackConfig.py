@@ -64,9 +64,9 @@ def downloadRudderstackSchemas(serverDesc, rudderSchemaRetrievalAuth):
         for schemaEndpoint in schemaEndpointsToDownload:
             rudderstackSchemas[schemaEndpoint] = downloadRudderEndpoint(
                 rudderSchemaRetrievalAuth,
-                rudderSchemaRetrievalUrl(serverDesc),
+                getRudderSchemaRetrievalUrl(serverDesc),
                 "/" + schemaEndpoint,
-                rudderFilepath(serverDesc))
+                getRudderFilepath(serverDesc))
 
 def downloadRudderEndpointV2(headers, url, endpoint, params, filepath):
     """
