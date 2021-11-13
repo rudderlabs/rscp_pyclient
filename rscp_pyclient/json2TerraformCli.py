@@ -34,6 +34,8 @@ def jsonToTerraformTreeWithIndents(json):
 
     if elementryType != None:
         valueStr = "\"{0}\"".format(json) if isinstance(json, str) else str(json)
+        if isinstance(json, bool):
+            valueStr = valueStr.lower()
         return [(0, "{"), (2, elementryType + " ="), (4, valueStr), (0, "}")]
 
     if isinstance(json, list):
