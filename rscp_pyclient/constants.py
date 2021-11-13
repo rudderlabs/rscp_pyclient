@@ -7,7 +7,6 @@ savedir = "savedir/"
 # Sub directories for saving rudderstack and segment data.
 segConfigDir = savedir + "SegmentConfig/"
 segWorkspacesDir = segConfigDir + "workspaces/"
-rsConfigDir = savedir + "RudderStackConfig/"
 
 
 def getServerSlug(serverDesc=True):
