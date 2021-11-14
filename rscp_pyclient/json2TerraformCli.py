@@ -36,7 +36,7 @@ def jsonToTerraformTreeWithIndents(json):
         valueStr = "\"{0}\"".format(json) if isinstance(json, str) else str(json)
         if isinstance(json, bool):
             valueStr = valueStr.lower()
-        return [(0, "{"), (2, elementryType + " ="), (4, valueStr), (0, "}")]
+        return [(0, "{"), (2, elementryType + " = " + valueStr), (0, "}")]
 
     if isinstance(json, list):
         if len(json) == 0:
@@ -46,7 +46,7 @@ def jsonToTerraformTreeWithIndents(json):
             for index, jsonElement in enumerate(json):
                 jsonElementTerraformTree = jsonToTerraformTreeWithIndents(jsonElement)
                 if index != len(json) - 1:
-                    jsonElementTerraformTree = _appendComma(jsonElementTerraformTree)
+                    jsonElementTerraformTree = addText(jsonElementTerraformTree, ",", suffixIfTrueElsePrefix=True)
                 retlist.append(jsonElementTerraformTree)
             return [(0, "{"), (2, "objects_list = ["), (4, retlist), (2, "]"), (0, "}")]
     elif isinstance(json, dict):
@@ -55,18 +55,14 @@ def jsonToTerraformTreeWithIndents(json):
         else:
             retlist = []
             for index, (jsonKey, jsonValue) in enumerate(json.items()):
-                jsonKeyStr = "\"{0}\":".format(jsonKey) if isinstance(jsonKey, str) else str(jsonKey)
+                jsonKeyStr = "\"{0}\"".format(jsonKey) if isinstance(jsonKey, str) else str(jsonKey)
+                jsonKeyStr = jsonKeyStr + ": "
                 jsonValueTerraformTree = jsonToTerraformTreeWithIndents(jsonValue)
                 if index != len(json) - 1:
-                    jsonValueTerraformTree = _appendComma(jsonValueTerraformTree)
-                if isinstance(jsonValueTerraformTree, list) \
-                        and len(jsonValueTerraformTree) >= 1 \
-                        and isinstance(jsonValueTerraformTree[0], tuple) \
-                        and jsonValueTerraformTree[0][1] == "{" :
-                    jsonKeyStr += " {"
-                    del jsonValueTerraformTree[0]
+                    jsonValueTerraformTree = addText(jsonValueTerraformTree, ",", suffixIfTrueElsePrefix=True)
+                jsonValueTerraformTree = addText(jsonValueTerraformTree, jsonKeyStr, suffixIfTrueElsePrefix=False)
 
-                retlist.append([(0, jsonKeyStr), jsonValueTerraformTree])
+                retlist.append(jsonValueTerraformTree)
             
             return [(0, "{"), (2, "object = {"), (4, retlist), (2, "}"), (0, "}")]
     else:
@@ -115,19 +111,29 @@ def jsonToIndentedTerraformCli(json):
     terraformCli, isSingleLine = terraformTreeToIndentedTerraformCli(terraformTreeWithIndents)
     return terraformCli
 
-def _appendComma(terraformTreeWithIndents):
+def addText(terraformTreeWithIndents, text, suffixIfTrueElsePrefix):
     lastTupleNode = terraformTreeWithIndents
     parentToLastTupleNode = None
     while not isinstance(lastTupleNode, tuple):
         assert(isinstance(lastTupleNode, list))
         parentToLastTupleNode = lastTupleNode
-        lastTupleNode = lastTupleNode[len(lastTupleNode) - 1]
+        if suffixIfTrueElsePrefix:
+            lastTupleNode = lastTupleNode[len(lastTupleNode) - 1]
+        else:
+            lastTupleNode = lastTupleNode[0]
     indent, strValue = lastTupleNode
-    strValue = strValue + ","
+    if suffixIfTrueElsePrefix:
+        strValue = strValue + text 
+    else:
+        strValue = text + strValue 
+
     if parentToLastTupleNode == None:
         terraformTreeWithIndents = (indent, strValue)
     else:
-        parentToLastTupleNode[len(parentToLastTupleNode) - 1] = (indent, strValue)
+        if suffixIfTrueElsePrefix:
+            parentToLastTupleNode[len(parentToLastTupleNode) - 1] = (indent, strValue)
+        else:
+            parentToLastTupleNode[0] = (indent, strValue)
 
     return terraformTreeWithIndents
 
