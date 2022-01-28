@@ -40,7 +40,7 @@ def jsonToTerraformTreeWithIndents(json):
 
     if isinstance(json, list):
         if len(json) == 0:
-            return [(0, "{"), (2, "objects_list = []"), (0, "}")]
+            return [(0, "{"), (2, "list = []"), (0, "}")]
         else:
             retlist = []
             for index, jsonElement in enumerate(json):
@@ -48,7 +48,7 @@ def jsonToTerraformTreeWithIndents(json):
                 if index != len(json) - 1:
                     jsonElementTerraformTree = addText(jsonElementTerraformTree, ",", suffixIfTrueElsePrefix=True)
                 retlist.append(jsonElementTerraformTree)
-            return [(0, "{"), (2, "objects_list = ["), (4, retlist), (2, "]"), (0, "}")]
+            return [(0, "{"), (2, "list = ["), (4, retlist), (2, "]"), (0, "}")]
     elif isinstance(json, dict):
         if len(json) == 0:
             return [(0, "{"), (2, "object = {}"), (0, "}")]
